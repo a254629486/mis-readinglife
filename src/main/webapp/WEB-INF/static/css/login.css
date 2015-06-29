@@ -1,0 +1,87 @@
+body{
+	background:url(../images/login/login_bg_1_1024.jpg) repeat-x;
+	padding:0px;
+	margin:0px;
+	text-align:center;
+}
+.context{
+	text-align:center;
+	padding:0px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top:250px;
+	width:auto;
+	width:600px;
+	height:320px;
+	
+}
+.top{
+	height:180px;
+	width:550px;
+}
+.bottom{
+	height:110px;
+	width:600px;
+}
+.logo{
+	width:82px;
+	height:180px;
+	background-image:url(../images/login/logo.png)
+}
+.title{
+	width:450px;
+	height:180px;
+	color:#FFF;
+}
+.input{
+	width:417px;
+	height:110px;
+	margin:0px 0px 0px 15px
+}
+.input input{
+	background:url(../images/login/login_input_1_30.jpg) repeat-x;
+	height:30px;
+	width:280px;
+	border:1px solid #666;
+	margin:0px;
+	padding:0px;
+	color:#FFF;
+	margin:20px 50px 0px 0px
+}
+.button{
+	width:160px;
+	height:110px;
+	
+}
+.button div{
+	background:url(../images/login/login_button_97_194.png) no-repeat;
+	background-position: 0px 0px;
+	height:22px;
+	width:97px;
+	margin:15px 50px 0px 0px;
+	padding:75px 0px 0px 0px;
+	
+} 
+.button div:hover{
+	background-position: 0px -97px;
+}
+.fleft{
+	float:left;
+}
+.checked{
+	font-size:11px;
+	margin-left:10px;   
+	height:20px;
+	width:190px;
+	margin:5px 0px 0px 80px;
+}
+.one{
+	font-size:11px;
+	margin-left:10px;   
+	height:20px;
+	width:190px;
+	margin:10px 0px 0px 115px;
+}
+a:link {
+ text-decoration: none;
+}

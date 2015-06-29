@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.dao.impl.SysDataRoleDAO" >
+  <resultMap id="BaseResultMap" type="com.system.model.po.SysDataRolePO" >
+    <id column="DATA_ROLE_ID" property="dataRoleId" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+  </resultMap>
+  <select id="getDataRoleList" resultMap="BaseResultMap" parameterType="Map">
+  	SELECT
+  		sys_data_role.DATA_ROLE_ID,
+		sys_data_role.`NAME`,
+		sys_data_role.`CODE`,
+		sys_data_role.`STATUS`
+	FROM
+		sys_data_role
+	<where>
+	<if test="name!=null and name!='' ">
+    		 and sys_data_role.`NAME` like concat('%',#{name},'%')
+    </if>
+    <if test="code!=null and code!='' ">
+    		 and sys_data_role.`CODE` like concat('%',#{code},'%')
+    </if> 
+    <if test="status!=null and status!='' ">
+    		 and sys_data_role.`STATUS`= #{status}
+    </if> 
+    </where> 
+    limit #{page},#{rows}
+  </select>
+  <select id="getDataRoleListTotal" resultType="int" parameterType="Map">
+  	SELECT
+		count(*)
+	FROM
+		sys_data_role
+	<where>
+	<if test="name!=null and name!='' ">
+    		 and sys_data_role.`NAME` like concat('%',#{name},'%')
+    </if>
+    <if test="code!=null and code!='' ">
+    		 and sys_data_role.`CODE` like concat('%',#{code},'%')
+    </if> 
+    <if test="status!=null and status!='' ">
+    		 and sys_data_role.`STATUS`= #{status}
+    </if> 
+    </where>
+  </select>
+  </mapper>

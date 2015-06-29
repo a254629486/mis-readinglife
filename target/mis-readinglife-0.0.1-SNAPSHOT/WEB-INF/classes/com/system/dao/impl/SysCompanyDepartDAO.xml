@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.dao.impl.SysCompanyDepartDAO">
+  <resultMap id="BaseResultMap" type="com.system.model.vo.SysCompanyDepartVO">
+	 	<result column="depart_id" jdbcType="VARCHAR" property="departId" />
+	 	<result column="depart_pid" jdbcType="VARCHAR" property="departPid" />
+	 	<result column="compan_id" jdbcType="VARCHAR" property="companId" />
+	 	<result column="name" jdbcType="VARCHAR" property="name" />
+	 	<result column="code" jdbcType="VARCHAR" property="code" />
+	 	<result column="priori" jdbcType="INTEGER" property="priori" />
+	 	<result column="status" jdbcType="CHAR" property="status" />
+	 	<result column="remark" jdbcType="VARCHAR" property="remark" />
+	 	<result column="type" jdbcType="VARCHAR" property="type" />
+	 	<result column="full_name" jdbcType="VARCHAR" property="fullName" />
+	 	<result column="addres" jdbcType="VARCHAR" property="addres" />
+  </resultMap>
+  <select id="selectId"  resultMap="BaseResultMap" parameterType="java.util.Map">
+	 SELECT   compan_id AS 'depart_id',   '' AS 'depart_pid',   'company' AS 'compan_id',   NAME AS 'name',   CODE,    priori,   STATUS,   remark ,'company' AS 'type',ADDRES AS 'addres',FULL_NAME AS 'full_name' FROM sys_compan c  
+	 UNION 
+ 	 SELECT   depart_id,   depart_pid,   compan_id,   NAME,   CODE,   priori,   STATUS,   remark  ,'depart' AS 'type','addres' AS 'addres','fname' AS 'full_name'  FROM sys_depart d   ORDER BY  priori
+  </select>
+  <select id="countId"  resultType="java.lang.Integer" parameterType="java.util.Map">
+     SELECT COUNT(*) FROM (   
+    	SELECT   compan_id AS 'depart_id',   '' AS 'depart_pid',   'company' AS 'compan_id',   NAME AS 'name',   CODE,    priori,   STATUS,   remark ,'company' AS 'type',ADDRES AS 'addres',FULL_NAME AS 'full_name' FROM sys_compan c  
+		 UNION 
+		SELECT   depart_id,   depart_pid,   compan_id,   NAME,   CODE,   priori,   STATUS,   remark  ,'depart' AS 'type','addres' AS 'addres','fname' AS 'full_name'  FROM sys_depart d  
+		   ) sys_company_depart 
+  </select>
+  <select id="positiselectId"  resultMap="BaseResultMap" parameterType="java.util.Map">
+         SELECT   compan_id AS 'depart_id',   '' AS 'depart_pid',   'company' AS 'compan_id',   NAME AS 'name',   CODE,    priori,   STATUS,   remark ,'company' AS 'type' 
+		    FROM sys_compan c  
+		    UNION  
+		    SELECT   depart_id,   depart_pid,   compan_id,   NAME,   CODE,   priori,   STATUS,   remark  ,'depart' AS 'type'  
+		    FROM sys_depart d   
+		    UNION
+		    SELECT POSITI_ID AS 'depart_id', DEPART_ID  AS 'depart_pid', 'positi' AS 'compan_id', NAME AS 'name',  'positicode' AS 'CODE', priori,   STATUS,   'remark' AS 'remark' ,'positi' AS 'type' 
+		    FROM  sys_positi
+		    ORDER BY  priori
+  </select>
+  <select id="positicountId"  resultType="java.lang.Integer" parameterType="java.util.Map">
+     SELECT COUNT(*) FROM (    
+     
+         SELECT   compan_id AS 'depart_id',   '' AS 'depart_pid',   'company' AS 'compan_id',   NAME AS 'name',   CODE,    priori,   STATUS,   remark ,'company' AS 'type' 
+		    FROM sys_compan c  
+		    UNION  
+		    SELECT   depart_id,   depart_pid,   compan_id,   NAME,   CODE,   priori,   STATUS,   remark  ,'depart' AS 'type'  
+		    FROM sys_depart d   
+		    UNION
+		    SELECT POSITI_ID AS 'depart_id', DEPART_ID  AS 'depart_pid', 'positi' AS 'compan_id', NAME AS 'name',  'positicode' AS 'CODE', priori,   STATUS,   'remark' AS 'remark' ,'positi' AS 'type' 
+		    FROM  sys_positi
+     
+           ) sys_company_depart 
+  </select>
+</mapper>

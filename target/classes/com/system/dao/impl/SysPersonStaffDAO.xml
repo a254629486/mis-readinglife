@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.dao.impl.SysPersonStaffDAO">
+
+  <resultMap id="StaffPositiBaseResultMap" type="com.system.model.po.SysPositiPO" >
+    <id column="POSITI_ID" property="positiId" jdbcType="VARCHAR" />
+    <result column="POSITI_PID" property="positiPid" jdbcType="VARCHAR" />
+    <result column="DEPART_ID" property="departId" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="PRIORI" property="priori" jdbcType="INTEGER" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap" type="com.system.model.vo.SysPersonStaffVO">
+	 	<result column="login_name" jdbcType="VARCHAR" property="loginName" />
+	 	<result column="login_pwd" jdbcType="VARCHAR" property="loginPwd" />
+	 	<result column="name" jdbcType="VARCHAR" property="name" />
+	 	<result column="gender" jdbcType="CHAR" property="gender" />
+	 	<result column="age" jdbcType="VARCHAR" property="age" />
+	 	<result column="email" jdbcType="VARCHAR" property="email" />
+	 	<result column="qq" jdbcType="VARCHAR" property="qq" />
+	 	<result column="mphone_no" jdbcType="VARCHAR" property="mphoneNo" />
+	 	<result column="tphone_no" jdbcType="VARCHAR" property="tphoneNo" />
+	 	<result column="extens_no" jdbcType="VARCHAR" property="extensNo" />
+	 	<result column="depart_id" jdbcType="VARCHAR" property="departId" />
+	 	<result column="positi_id" jdbcType="VARCHAR" property="positiId" />
+	 	<result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+	 	<result column="person_id" jdbcType="VARCHAR" property="personId" />
+	 	<result column="status" jdbcType="CHAR" property="status" />
+	 	<result column="positiname" jdbcType="VARCHAR" property="positiName" />
+	 	<result column="departname" jdbcType="VARCHAR" property="departName" />
+	 	<result column="companname" jdbcType="VARCHAR" property="companName" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMapPerson" type="com.system.model.po.SysStaffPO" >
+    <id column="STAFF_ID" property="staffId" jdbcType="VARCHAR" />
+    <result column="DEPART_ID" property="departId" jdbcType="VARCHAR" />
+    <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR" />
+    <result column="LOGIN_PWD" property="loginPwd" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="GENDER" property="gender" jdbcType="CHAR" />
+    <result column="AGE" property="age" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <result column="MPHONE_NO" property="mphoneNo" jdbcType="VARCHAR" />
+    <result column="TPHONE_NO" property="tphoneNo" jdbcType="VARCHAR" />
+    <result column="EXTENS_NO" property="extensNo" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+    <result column="STAFF_TYPE" property="staffType" jdbcType="CHAR" />
+  </resultMap>
+  <select id="selectId"  resultMap="BaseResultMap" parameterType="java.util.Map">
+         SELECT p.login_name , p.login_pwd , p.name , p.gender , p.age , p.email , p.qq , p.mphone_no , p.tphone_no , p.extens_no , p.status , p.depart_id , p.staff_id , 
+			 d.NAME AS 'departname',c.NAME AS 'companname',
+			 GROUP_CONCAT( sp.positi_id) as 'positi_id',
+			 GROUP_CONCAT( spi.name ) AS 'positiname' 
+			  
+			  FROM sys_staff p LEFT JOIN sys_staff_positi sp ON p.STAFF_ID=sp.STAFF_ID 
+			  LEFT JOIN sys_positi spi ON sp.positi_id =spi.positi_id 
+			  LEFT JOIN sys_depart d ON p.DEPART_ID=d.DEPART_ID
+			  LEFT JOIN sys_compan c ON c.COMPAN_ID=d.COMPAN_ID
+	     WHERE 1=1
+     <if test="companId != null" >
+         and p.depart_id in  
+          <foreach item="item" collection="companId" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach>  
+      </if>
+     <if test="departId != null" >
+       and p.depart_id  = #{departId,jdbcType=VARCHAR}
+      </if>
+      
+        GROUP BY  p.login_name , p.login_pwd , p.name , p.gender , p.age , p.email , p.qq , p.mphone_no , p.tphone_no , p.extens_no , p.status , p.depart_id ,  p.staff_id ,d.NAME,c.NAME
+  </select>
+  <select id="countId"  resultType="java.lang.Integer" parameterType="java.util.Map">
+     SELECT COUNT(1) FROM ( 
+			 SELECT  p.STAFF_ID
+	          FROM sys_staff p LEFT JOIN sys_staff_positi sp ON p.STAFF_ID=sp.STAFF_ID 
+			  LEFT JOIN sys_positi spi ON sp.positi_id =spi.positi_id 
+			  LEFT JOIN sys_depart d ON p.DEPART_ID=d.DEPART_ID
+			  LEFT JOIN sys_compan c ON c.COMPAN_ID=d.COMPAN_ID 
+	     WHERE 1=1
+     <if test="companId != null" >
+         and p.depart_id in  
+          <foreach item="item" collection="companId" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach>  
+      </if>
+     <if test="departId != null" >
+       and p.depart_id  = #{departId,jdbcType=VARCHAR}
+      </if>
+        GROUP BY  p.STAFF_ID
+  		) t
+  </select>
+  
+  <select id="havePerson"  resultType="java.lang.Integer" parameterType="java.util.Map">
+ 	 SELECT COUNT(*) FROM sys_positi p ,sys_staff_positi sp WHERE p.POSITI_ID=sp.POSITI_ID 
+		AND sp.STAFF_ID=#{staffId,jdbcType=VARCHAR} AND p.POSITI_ID=#{positiId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getStaff"  resultMap="BaseResultMap" parameterType="java.util.Map">
+       select  sf.staff_id,sf.person_id ,sf.positi_id    from  sys_staff sf where sf.person_id =  #{personId,jdbcType=VARCHAR}
+      <if test="positiId != null" >
+       and sf.positi_id  = #{positiId,jdbcType=VARCHAR}
+      </if>
+      <if test="departId != null" >
+       and sf.depart_id  = #{departId,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
+  <select id="getPersonByParam"  resultMap="BaseResultMapPerson" parameterType="java.util.Map">
+		SELECT   ss.*   FROM   sys_staff  ss 
+		WHERE  1=1 
+		AND EXISTS(SELECT   1   FROM   sys_depart  sd WHERE  sd.DEPART_ID=ss.DEPART_ID AND sd.COMPAN_ID=#{companyId,jdbcType=VARCHAR}  )
+		AND 
+		(
+		EXISTS(SELECT   1   FROM   sys_staff_csmpvg  ssc LEFT JOIN sys_privil spi ON ssc.PRIVIL_ID=spi.PRIVIL_ID WHERE  ssc.STAFF_ID=ss.STAFF_ID AND spi.NAME  like #{privilName,jdbcType=VARCHAR}  )
+		OR 
+		EXISTS(SELECT   1   FROM   sys_positi_privil  spp LEFT JOIN sys_staff_positi ssp ON ssp.POSITI_ID=spp.POSITI_ID LEFT JOIN sys_privil spi ON spp.PRIVIL_ID=spi.PRIVIL_ID WHERE  ssp.STAFF_ID=ss.STAFF_ID AND spi.NAME  like #{privilName,jdbcType=VARCHAR} )
+		)
+  </select>
+  
+  <insert id="insertStaffPositi" parameterType="com.system.model.vo.SysStaffPositiSaveVO" >
+ 	 insert into sys_staff_positi (STAFF_ID,POSITI_ID)
+		values (#{staffId,jdbcType=VARCHAR}, #{positiId,jdbcType=VARCHAR})
+  </insert>
+  <delete id="deleteStaffPositiByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_staff_positi
+    where STAFF_ID = #{staffId,jdbcType=VARCHAR}
+  </delete>
+  
+   <select id="selectStaffPositi"  resultMap="StaffPositiBaseResultMap" parameterType="java.util.Map">
+ 	 SELECT p.* FROM sys_positi p ,sys_staff_positi sp WHERE p.POSITI_ID=sp.POSITI_ID 
+		 AND sp.STAFF_ID=#{staffId,jdbcType=VARCHAR} 
+   </select>
+   <select id="selectStaffPositicountId"  resultType="java.lang.Integer" parameterType="java.util.Map">
+ 	 SELECT count(1) FROM sys_positi p ,sys_staff_positi sp WHERE p.POSITI_ID=sp.POSITI_ID 
+		 AND sp.STAFF_ID=#{staffId,jdbcType=VARCHAR} 
+   </select>
+   
+    <update id="changeDepart" parameterType="map" >
+    	update sys_staff
+    	set  DEPART_ID = #{departId,jdbcType=VARCHAR} 
+    	where STAFF_ID = #{staffId,jdbcType=VARCHAR}
+      </update>
+</mapper>

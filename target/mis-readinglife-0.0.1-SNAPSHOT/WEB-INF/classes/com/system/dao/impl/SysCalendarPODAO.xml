@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.dao.impl.SysCalendarPODAO">
+	<resultMap id="BaseResultMap" type="com.system.model.vo.SysCalendarVO">
+		<id column="YEAR" property="year" jdbcType="DECIMAL" />
+		<id column="MONTH" property="month" jdbcType="DECIMAL" />
+		<id column="DAY" property="day" jdbcType="DECIMAL" />
+		<result column="WEEK" property="week" jdbcType="VARCHAR" />
+		<result column="HOLIDAY_FLAG" property="holidayFlag" jdbcType="DECIMAL" />
+		<result column="HOLIDAY_NAME" property="holidayName" jdbcType="VARCHAR" />
+		<result column="CSSCLASS" property="cssclass" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="insertdata" resultMap="BaseResultMap" >
+		insert ignore into sys_calendar (YEAR, MONTH, DAY, 
+      WEEK, HOLIDAY_FLAG, HOLIDAY_NAME
+      )
+    values (#{year,jdbcType=DECIMAL}, #{month,jdbcType=DECIMAL}, #{day,jdbcType=DECIMAL}, 
+      #{week,jdbcType=VARCHAR}, #{holidayFlag,jdbcType=DECIMAL}, #{holidayName,jdbcType=VARCHAR}
+      )
+	</select>
+
+	<select id="getNowMonthList" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		*
+		FROM
+		sys_calendar
+		WHERE
+		YEAR = #{year}
+		AND MONTH =#{month}
+	</select>
+	<select id="getBeforeMonthList" resultMap="BaseResultMap"
+		parameterType="map">
+		select * from(
+		SELECT
+		*
+		FROM
+		sys_calendar
+		WHERE
+		YEAR = #{year}
+		AND MONTH = #{month}
+		ORDER BY
+		sys_calendar.`DAY` DESC
+		LIMIT #{beforenum}
+		) t order by t.day
+	</select>
+	<select id="getAfterMonthList" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		*
+		FROM
+		sys_calendar
+		WHERE
+		YEAR = #{year}
+		AND MONTH = #{month}
+		LIMIT #{afternum}
+	</select>
+	<select id="getYearList" resultMap="BaseResultMap">
+		SELECT
+		*
+		FROM
+		sys_calendar
+		GROUP BY
+		sys_calendar.`YEAR`;
+	</select>
+	<select id="searchMonthList" resultMap="BaseResultMap">
+		SELECT
+		*
+		FROM
+		sys_calendar
+		GROUP BY
+		sys_calendar.`MONTH`;
+	</select>
+	<select id="selectholidayList" resultMap="BaseResultMap">
+		SELECT
+		*
+		FROM
+		sys_calendar
+		WHERE  
+		HOLIDAY_NAME !=''
+		AND YEAR = #{selectyear}
+		GROUP BY
+		HOLIDAY_NAME
+	</select>
+	<!-- 修改节假日期 -->
+	<update id="updateCal" parameterType="map">
+		update sys_calendar set HOLIDAY_FLAG = #{flag} , HOLIDAY_NAME =
+		#{holidayname}
+		where `YEAR` = #{year} and `MONTH` = #{month} and `DAY` = #{day}
+	</update>
+	<select id="getmonth" resultType="int" parameterType="map">
+		SELECT DISTINCT
+			`MONTH`
+		FROM
+			sys_calendar
+		WHERE
+			sys_calendar.`YEAR` = #{year}
+		AND sys_calendar.HOLIDAY_NAME = #{holidayName}
+	</select>
+</mapper>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.dao.impl.SysPrivilPOMapper" >
+  <resultMap id="BaseResultMap" type="com.system.model.po.SysPrivilPO" >
+    <id column="PRIVIL_ID" property="privilId" jdbcType="VARCHAR" />
+    <result column="PRIVIL_PID" property="privilPid" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="CHAR" />
+    <result column="PROGRA_CODE" property="prograCode" jdbcType="VARCHAR" />
+    <result column="PRIORI" property="priori" jdbcType="INTEGER" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    PRIVIL_ID, PRIVIL_PID, NAME, TYPE, PROGRA_CODE, PRIORI, STATUS
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.model.po.SysPrivilPOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_privil
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_privil
+    where PRIVIL_ID = #{privilId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_privil
+    where PRIVIL_ID = #{privilId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.system.model.po.SysPrivilPOExample" >
+    delete from sys_privil
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.system.model.po.SysPrivilPO" >
+    insert into sys_privil (PRIVIL_ID, PRIVIL_PID, NAME, 
+      TYPE, PROGRA_CODE, PRIORI, 
+      STATUS)
+    values (#{privilId,jdbcType=VARCHAR}, #{privilPid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{type,jdbcType=CHAR}, #{prograCode,jdbcType=VARCHAR}, #{priori,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.model.po.SysPrivilPO" >
+    insert into sys_privil
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="privilId != null" >
+        PRIVIL_ID,
+      </if>
+      <if test="privilPid != null" >
+        PRIVIL_PID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="prograCode != null" >
+        PROGRA_CODE,
+      </if>
+      <if test="priori != null" >
+        PRIORI,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="privilId != null" >
+        #{privilId,jdbcType=VARCHAR},
+      </if>
+      <if test="privilPid != null" >
+        #{privilPid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="prograCode != null" >
+        #{prograCode,jdbcType=VARCHAR},
+      </if>
+      <if test="priori != null" >
+        #{priori,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.system.model.po.SysPrivilPOExample" resultType="java.lang.Integer" >
+    select count(*) from sys_privil
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update sys_privil
+    <set >
+      <if test="record.privilId != null" >
+        PRIVIL_ID = #{record.privilId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.privilPid != null" >
+        PRIVIL_PID = #{record.privilPid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        TYPE = #{record.type,jdbcType=CHAR},
+      </if>
+      <if test="record.prograCode != null" >
+        PROGRA_CODE = #{record.prograCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priori != null" >
+        PRIORI = #{record.priori,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        STATUS = #{record.status,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update sys_privil
+    set PRIVIL_ID = #{record.privilId,jdbcType=VARCHAR},
+      PRIVIL_PID = #{record.privilPid,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=CHAR},
+      PROGRA_CODE = #{record.prograCode,jdbcType=VARCHAR},
+      PRIORI = #{record.priori,jdbcType=INTEGER},
+      STATUS = #{record.status,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.model.po.SysPrivilPO" >
+    update sys_privil
+    <set >
+      <if test="privilPid != null" >
+        PRIVIL_PID = #{privilPid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=CHAR},
+      </if>
+      <if test="prograCode != null" >
+        PROGRA_CODE = #{prograCode,jdbcType=VARCHAR},
+      </if>
+      <if test="priori != null" >
+        PRIORI = #{priori,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where PRIVIL_ID = #{privilId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.model.po.SysPrivilPO" >
+    update sys_privil
+    set PRIVIL_PID = #{privilPid,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=CHAR},
+      PROGRA_CODE = #{prograCode,jdbcType=VARCHAR},
+      PRIORI = #{priori,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=CHAR}
+    where PRIVIL_ID = #{privilId,jdbcType=VARCHAR}
+  </update>
+</mapper>

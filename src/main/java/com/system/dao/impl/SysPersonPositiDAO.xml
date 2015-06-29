@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.dao.impl.SysPersonPositiDAO">
+  <resultMap id="BaseResultMap" type="com.system.model.vo.SysPersonPositiVO">
+	 	<result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+	 	<result column="depart_id" jdbcType="VARCHAR" property="departId" />
+	 	<result column="positi_id" jdbcType="VARCHAR" property="positiId" />
+	 	<result column="status" jdbcType="CHAR" property="status" />
+	 	<result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <select id="selectId"  resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT  s.staff_id,  s.depart_id,    sp.positi_id,  s.status,  p.name 
+	  FROM sys_staff s LEFT JOIN sys_staff_positi sp ON s.STAFF_ID=sp.STAFF_ID
+	  LEFT JOIN sys_positi p ON p.positi_id=sp.positi_id 
+	  WHERE s.staff_id = #{personId,jdbcType=VARCHAR}  
+  </select>
+  <select id="countId"  resultType="java.lang.Integer" parameterType="java.util.Map">
+       select count(*)   FROM sys_staff s LEFT JOIN sys_staff_positi sp ON s.STAFF_ID=sp.STAFF_ID
+		  LEFT JOIN sys_positi p ON p.positi_id=sp.positi_id 
+		  WHERE s.staff_id = #{personId,jdbcType=VARCHAR}  
+    </select>
+</mapper>

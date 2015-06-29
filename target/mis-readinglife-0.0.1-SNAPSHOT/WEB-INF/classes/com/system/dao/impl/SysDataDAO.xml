@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.dao.impl.SysDataDAO">
+	<select id="queryTable" resultType="hashmap">
+		show tables
+	</select>
+	<select id="queryColumns" parameterType="String" resultType="hashmap" >
+		show columns from ${tableName}
+	</select> 
+	
+	<select id="qTableByDB" parameterType="list" resultType="hashmap">
+		select concat(t.TABLE_SCHEMA,',',t.TABLE_NAME) as id,t.TABLE_SCHEMA,t.TABLE_NAME,t.TABLE_COMMENT from INFORMATION_SCHEMA.TABLES t
+		<if test="array != null">
+			<where>
+				t.TABLE_SCHEMA in
+				<foreach collection="array" item="item" open="(" close=")" separator=","  >
+					#{item}
+				</foreach>
+			</where>
+		</if>
+	</select>
+	
+	<select id="qAllColumns" parameterType="list" resultType="hashmap" >
+		select c.TABLE_SCHEMA,c.TABLE_NAME,c.COLUMN_NAME,c.COLUMN_TYPE,c.COLUMN_COMMENT from INFORMATION_SCHEMA.COLUMNS c
+	<where>
+		c.TABLE_SCHEMA in
+		<foreach collection="list" item="item" open="(" close=")" separator="," >
+			#{item}
+		</foreach>
+	</where> 
+	</select>
+
+	<select id="qColumnsByTable" parameterType="map" resultType="hashmap" >
+		select c.COLUMN_NAME,c.COLUMN_TYPE,c.COLUMN_COMMENT from INFORMATION_SCHEMA.COLUMNS c
+		where c.TABLE_NAME = #{tableName} and c.TABLE_SCHEMA = #{dbName}
+	</select>
+	<insert id="saveRoleDataPriv">
+		insert into sys_data_role_privil (DATA_ROLE_ID, DATA_PRIVIL_ID) values ( #{dataRoleId},#{dataPrivilId})
+	</insert>
+	
+	<sql id="sqlCon">
+		from
+	  sys_data_privil a 
+	  inner join sys_data_role_privil b 
+	    on a.DATA_PRIVIL_ID = b.DATA_PRIVIL_ID 
+	  inner join sys_data_role c 
+	    on b.DATA_ROLE_ID = c.DATA_ROLE_ID 
+	</sql>	
+	
+	<select id="qRoleDataList" parameterType="map" resultType="hashmap">
+		select 
+		  c.DATA_ROLE_ID,
+		  c.NAME as roleName,
+		  c.STATUS,
+		  a.DATA_PRIVIL_ID,
+		  a.TABLE_CODE,
+		  a.TABLE_NAME,
+		  a.COLUMN_CODE,
+		  a.COLUMN_NAME,
+		  a.ROLE 
+		 <include refid="sqlCon"/>
+		 <where>
+		 	<if test="roleName != null"> and c.NAME like concat('%',#{roleName},'%')  </if>
+		 	<if test="tableName != null"> and a.TABLE_CODE like concat('%',#{tableName},'%')  </if>
+		 </where>
+	</select>
+	
+	<select id="qRoleDataListCnt" parameterType="map" resultType="int">
+			select count(*)
+		 <include refid="sqlCon"/>
+		 <where>
+		 	<if test="roleName != null"> and c.NAME like concat('%',#{roleName},'%')  </if>
+		 	<if test="tableName != null"> and a.TABLE_CODE like concat('%',#{tableName},'%')  </if>
+		 </where>
+			limit 1
+	</select>
+	<delete id="dDataRolePriv" parameterType="String">
+		delete from sys_data_role_privil where DATA_PRIVIL_ID = #{dataPrivId} 
+	</delete>
+	<select id="qColumnPrivRole" parameterType="map" resultType="hashmap">
+		select s.ROLE from sys_data_privil s where s.TABLE_CODE =#{tableName} and s.COLUMN_CODE = #{column} 
+	</select>
+	<select id="qColumnRolePrivCnt" parameterType="String" resultType="hashmap">
+	select 	count(*) cnt ,COLUMN_CODE,TABLE_CODE
+		from
+		  sys_data_privil s 
+		where s.TABLE_CODE = #{tableName} 
+		  group by s.COLUMN_CODE
+		  having count(*) > 1;
+	</select>	
+	
+	<select id="qColumnRoleInfo" parameterType="String" resultType="hashmap">
+	select 
+  	count(*) cnt ,COLUMN_CODE,s.ROLE
+	from
+	  sys_data_privil s 
+	where s.TABLE_CODE = #{tableName} 
+	  group by s.COLUMN_CODE
+	  having count(*) =1;
+	</select>
+	
+	
+	<!-- 
+	<cache flushInterval="60000" size="512" eviction="LRU"></cache>
+	 -->
+</mapper>

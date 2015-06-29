@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="mis-readinglife"
+  id="myeclipse.1414940572356"
+  context-root="/mis-readinglife"
+  j2ee-spec="5.0"
+  archive="mis-readinglife.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

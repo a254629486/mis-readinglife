@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.dao.impl.SysAccessoryPOMapper" >
+  <resultMap id="BaseResultMap" type="com.system.model.po.SysAccessoryPO" >
+    <id column="ACCESSORY_ID" property="accessoryId" jdbcType="VARCHAR" />
+    <result column="ORDER_ID" property="orderId" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="SUFFIX" property="suffix" jdbcType="VARCHAR" />
+    <result column="PATH" property="path" jdbcType="VARCHAR" />
+    <result column="SIZE" property="size" jdbcType="DECIMAL" />
+    <result column="UPLOAD_DATE" property="uploadDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ACCESSORY_ID, ORDER_ID, NAME, SUFFIX, PATH, SIZE, UPLOAD_DATE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.model.po.SysAccessoryPOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_accessory
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_accessory
+    where ACCESSORY_ID = #{accessoryId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_accessory
+    where ACCESSORY_ID = #{accessoryId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.system.model.po.SysAccessoryPOExample" >
+    delete from sys_accessory
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.system.model.po.SysAccessoryPO" >
+    insert into sys_accessory (ACCESSORY_ID, ORDER_ID, NAME, 
+      SUFFIX, PATH, SIZE, 
+      UPLOAD_DATE)
+    values (#{accessoryId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{suffix,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{size,jdbcType=DECIMAL}, 
+      #{uploadDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.model.po.SysAccessoryPO" >
+    insert into sys_accessory
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accessoryId != null" >
+        ACCESSORY_ID,
+      </if>
+      <if test="orderId != null" >
+        ORDER_ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="suffix != null" >
+        SUFFIX,
+      </if>
+      <if test="path != null" >
+        PATH,
+      </if>
+      <if test="size != null" >
+        SIZE,
+      </if>
+      <if test="uploadDate != null" >
+        UPLOAD_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accessoryId != null" >
+        #{accessoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="suffix != null" >
+        #{suffix,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadDate != null" >
+        #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.system.model.po.SysAccessoryPOExample" resultType="java.lang.Integer" >
+    select count(*) from sys_accessory
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update sys_accessory
+    <set >
+      <if test="record.accessoryId != null" >
+        ACCESSORY_ID = #{record.accessoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        ORDER_ID = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.suffix != null" >
+        SUFFIX = #{record.suffix,jdbcType=VARCHAR},
+      </if>
+      <if test="record.path != null" >
+        PATH = #{record.path,jdbcType=VARCHAR},
+      </if>
+      <if test="record.size != null" >
+        SIZE = #{record.size,jdbcType=DECIMAL},
+      </if>
+      <if test="record.uploadDate != null" >
+        UPLOAD_DATE = #{record.uploadDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update sys_accessory
+    set ACCESSORY_ID = #{record.accessoryId,jdbcType=VARCHAR},
+      ORDER_ID = #{record.orderId,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      SUFFIX = #{record.suffix,jdbcType=VARCHAR},
+      PATH = #{record.path,jdbcType=VARCHAR},
+      SIZE = #{record.size,jdbcType=DECIMAL},
+      UPLOAD_DATE = #{record.uploadDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.model.po.SysAccessoryPO" >
+    update sys_accessory
+    <set >
+      <if test="orderId != null" >
+        ORDER_ID = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="suffix != null" >
+        SUFFIX = #{suffix,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        PATH = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        SIZE = #{size,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadDate != null" >
+        UPLOAD_DATE = #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ACCESSORY_ID = #{accessoryId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.model.po.SysAccessoryPO" >
+    update sys_accessory
+    set ORDER_ID = #{orderId,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      SUFFIX = #{suffix,jdbcType=VARCHAR},
+      PATH = #{path,jdbcType=VARCHAR},
+      SIZE = #{size,jdbcType=DECIMAL},
+      UPLOAD_DATE = #{uploadDate,jdbcType=TIMESTAMP}
+    where ACCESSORY_ID = #{accessoryId,jdbcType=VARCHAR}
+  </update>
+</mapper>
