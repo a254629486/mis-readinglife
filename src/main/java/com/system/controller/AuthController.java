@@ -25,6 +25,7 @@ import net.rubyeye.xmemcached.MemcachedClient;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
@@ -39,8 +40,10 @@ import com.readinglife.tools.cookie.CookieUtil;
 import com.readinglife.tools.json.Jacksons;
 import com.system.constants.UserToken;
 import com.system.model.po.SysPrivilPO;
+import com.system.model.po.SysPrivilPOExample;
 import com.system.model.po.SysStaffPO;
 import com.system.service.AuthService;
+import com.system.service.SysPrivilService;
 import com.system.service.SysStaffService;
 
 /**
@@ -64,6 +67,9 @@ public class AuthController extends BaseController{
 	private SysStaffService sysStaffService;
 	@Resource
 	private MemcachedClient memcachedClient;
+	
+	@Autowired
+	SysPrivilService sysPrivilService;
 	
 	/**
 	 * 登录跳转
@@ -191,7 +197,12 @@ public class AuthController extends BaseController{
 //			Map<String,Object> menuMap = PersonUtil.getPerson(request, memcachedClient);
 			
 			Cookie cookie =	CookieUtil.getCookieByName(request, DigestUtils.md5DigestAsHex(request.getServerName().getBytes()));
-			List<SysPrivilPO> list =  (List<SysPrivilPO>) memcachedClient.get(cookie.getValue()+"_privilLst");
+			System.out.println(">>>>>>>>>>>>>="+request.getServerName());
+			System.out.println(">>>>>>>>>>>>>="+DigestUtils.md5DigestAsHex(request.getServerName().getBytes()));
+//			List<SysPrivilPO> list =  (List<SysPrivilPO>) memcachedClient.get(cookie.getValue()+"_privilLst");
+			SysPrivilPOExample example = new SysPrivilPOExample();
+			com.system.model.po.SysPrivilPOExample.Criteria c = example.createCriteria();
+			List<SysPrivilPO> list = sysPrivilService.selectByExample(example);
 			List menuOneList = new ArrayList();
 			Map menu = null;
 			List<SysPrivilPO> menuTwoList = null;
