@@ -203,7 +203,7 @@ public class AuthController extends BaseController{
 			SysPrivilPOExample example = new SysPrivilPOExample();
 			com.system.model.po.SysPrivilPOExample.Criteria c = example.createCriteria();
 			List<SysPrivilPO> list = sysPrivilService.selectByExample(example);
-			List menuOneList = new ArrayList();
+			List menuOneList = new ArrayList(); 
 			Map menu = null;
 			List<SysPrivilPO> menuTwoList = null;
 			for (SysPrivilPO sysPrivilPO : list) {
